@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package>
+    <name>tams_pick_and_place_pointnetgpd</name>
+    <version>0.0.0</version>
+    <description>This package is a demonstration of how to use the grasps published by PointNetGPD with moveit to grasp
+        objects.
+    </description>
+    <maintainer email="liang@informatik.uni-hamburg.de">Hongzhuo Liang</maintainer>
+    <license>BSD</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <build_depend>moveit_ros_planning_interface</build_depend>
+    <build_depend>moveit_core</build_depend>
+    <build_depend>roscpp</build_depend>
+    <build_depend>std_msgs</build_depend>
+    <build_depend>message_generation</build_depend>
+    <build_depend>tf</build_depend>
+    <build_depend>ros_pcl</build_depend>
+    <build_depend>gpd_grasp_msgs</build_depend>
+    <run_depend>moveit_ros_planning_interface</run_depend>
+    <run_depend>moveit_core</run_depend>
+    <run_depend>roscpp</run_depend>
+    <run_depend>std_msgs</run_depend>
+    <run_depend>message_runtime</run_depend>
+    <run_depend>tf</run_depend>
+    <run_depend>ros_pcl</run_depend>
+    <run_depend>gpd_grasp_msgs</run_depend>
+
+</package>
