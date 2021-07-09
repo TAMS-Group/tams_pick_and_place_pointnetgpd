@@ -21,7 +21,7 @@ def get_robot_state_moveit():
             return 2  # robot is moving
     except:
         print("Get robot state failed", end="\r")
-        return 3  # robot state unknow
+        return 3  # robot state unknown
 
 
 if __name__ == "__main__":
@@ -32,11 +32,12 @@ if __name__ == "__main__":
     while not rospy.is_shutdown():
         at_home = get_robot_state_moveit()
         if at_home == 1:
-            rospy.set_param("/robot_at_home", "true")
+            rospy.set_param("/robot_at_home", True)
             print("Robot is at home position", end="\r")
         elif at_home == 2:
-            rospy.set_param("/robot_at_home", "false")
+            rospy.set_param("/robot_at_home", False)
             print("Robot is not at home position", end="\r")
         elif at_home == 3:
+            rospy.set_param("/robot_at_home", False)
             print("Get robot state failed", end="\r")
         rate.sleep()
