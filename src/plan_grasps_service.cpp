@@ -16,7 +16,6 @@ public:
     PlanPointNetGPDGrasp(ros::NodeHandle &n) {
         clustered_grasps_sub_ = n.subscribe("/detect_grasps/clustered_grasps", 1000,
                                             &PlanPointNetGPDGrasp::clustered_grasps_callback, this);
-        grasps_visualization_pub_ = n.advertise<geometry_msgs::PoseArray>("grasps_visualization", 10);
         ros::NodeHandle pn("~");
 
         pn.param("bound_frame", bound_frame_, std::string("table_top"));
@@ -120,8 +119,6 @@ public:
     }
 
     bool plan_grasp(moveit_msgs::GraspPlanning::Request &req, moveit_msgs::GraspPlanning::Response &res) {
-        geometry_msgs::PoseArray grasps_visualization;
-        grasps_visualization.header.frame_id = frame_id_;
 
         {
             std::lock_guard<std::mutex> lock(m_);
@@ -130,7 +127,6 @@ public:
                 if (grasp_candidate.second.sec < ros::Time::now().sec - grasp_cache_time_threshold_)
                     break;
                 res.grasps.push_back(grasp_candidate.first);
-                grasps_visualization.poses.push_back(grasp_candidate.first.grasp_pose.pose);
             }
         }
         grasp_candidates_.clear();
@@ -142,8 +138,6 @@ public:
             ROS_INFO("%ld grasps found.", res.grasps.size());
             res.error_code.val = moveit_msgs::MoveItErrorCodes::SUCCESS;
         }
-        grasps_visualization_pub_.publish(grasps_visualization);
-
         return true;
     }
 
@@ -166,7 +160,6 @@ private:
     std::mutex m_;
     ros::Subscriber clustered_grasps_sub_;
     tf::TransformListener listener_;
-    ros::Publisher grasps_visualization_pub_;
 
     // frame of the grasp
     std::string frame_id_;
