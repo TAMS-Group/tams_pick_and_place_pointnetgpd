@@ -7,8 +7,6 @@
 #include <tf/transform_listener.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/PointStamped.h>
-#include <geometry_msgs/PoseArray.h>
-
 #include <moveit/move_group_interface/move_group_interface.h>
 
 class PlanPointNetGPDGrasp {
@@ -92,7 +90,7 @@ public:
             listener_.transformPoint(bound_frame_, grasp_point, transformed_grasp_point);
         }
         catch (tf::TransformException ex) {
-            ROS_ERROR("transfrom exception : %s", ex.what());
+            ROS_ERROR("transform exception : %s", ex.what());
         }
 
         return (transformed_grasp_point.point.x < x_bound_ * 0.5 + x_bound_offset_
@@ -132,8 +130,8 @@ public:
         grasp_candidates_.clear();
 
         if (res.grasps.empty()) {
-            ROS_INFO("No valid grasp received, waiting.");
-            res.error_code.val = moveit_msgs::MoveItErrorCodes::SUCCESS;
+            ROS_INFO_THROTTLE(60, "No valid grasp received, waiting.");
+            res.error_code.val = moveit_msgs::MoveItErrorCodes::FAILURE;
         } else {
             ROS_INFO("%ld grasps found.", res.grasps.size());
             res.error_code.val = moveit_msgs::MoveItErrorCodes::SUCCESS;
@@ -142,8 +140,8 @@ public:
     }
 
 private:
-    static void jointValuesToJointTrajectory(std::map<std::string, double> target_values, const ros::Duration& duration,
-                                      trajectory_msgs::JointTrajectory &grasp_pose) {
+    static void jointValuesToJointTrajectory(std::map<std::string, double> target_values, const ros::Duration &duration,
+                                             trajectory_msgs::JointTrajectory &grasp_pose) {
         grasp_pose.joint_names.reserve(target_values.size());
         grasp_pose.points.resize(1);
         grasp_pose.points[0].positions.reserve(target_values.size());
